@@ -15,14 +15,30 @@
 	$cartItems="";
 	$cartItems=fetchNumItemsInCart($conn, $customer_id);
 
+	emptyBook($conn, $customer_id);
+
 	if(isset($_GET['delete'])){
 			$deleteID=$_GET['delete'];
 			deleteFromCart($conn, $deleteID);
 	}
 
+	if(isset($_GET['increase'])){
+		$increaseID=$_GET['increase'];
+		increaseQuantity($conn, $increaseID);
+	}
+
+	if(isset($_GET['decrease'])){
+		$decreaseID=$_GET['decrease'];
+		decreaseQuantity($conn, $decreaseID);
+	}
+
 	if(array_key_exists('checkout', $_POST)){
 		checkout($conn, $customer_id);
 	}
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -116,7 +132,6 @@
 		.cat:hover{
 			border-bottom: 3px solid white;
 			padding-bottom: 5px;
-			transition: 0.5s ease-in-out;
 			color: white;
 		}
 
@@ -240,6 +255,17 @@
 		}
 
 
+		.quantity{
+			width: 9%;
+			border: none;
+		}
+
+		a.quanLink{
+			border: none;
+		}
+
+
+
 	</style>
 </head>
 <body>
@@ -275,6 +301,9 @@
 				<th>Author</th>
 				<th>Category</th>
 				<th>Book Price</th>
+				<th>Quantity</th>
+				<th>Increase</th>
+				<th>Decrease</th>
 				<th>Remove</th>
 			</tr>
 		</thead>
@@ -289,6 +318,9 @@
 				<td> <?php echo $rows[$i]['author_name'] ?> </td>
 				<td> <?php echo $rows[$i]['book_category'] ?></td>
 				<td>  <?php echo $rows[$i]['book_price'] ?></td>
+				<td>  <?php echo $rows[$i]['quantity'] ?></td>
+				<td><a href="view_cart.php?increase=<?php echo $rows[$i]['order_id'] ?>"  class="quanLink"><img src="icons & logos/increase.png" class="quantity"></a></td>
+				<td><a href="view_cart.php?decrease=<?php echo $rows[$i]['order_id'] ?>" class="quanLink"><img src="icons & logos/decrease.png" class="quantity"></a></td>
 				<td><a href="view_cart.php?delete=<?php echo $rows[$i]['order_id'] ?>"> Delete </a></td>
 				
 			</tr>
