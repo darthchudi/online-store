@@ -3,6 +3,7 @@
 	ob_start();
 	include('includes/function.php');
 	include('includes/db.php');
+	userAuthenticate();
 	$stmt=$conn->prepare("SELECT * FROM books");
 	$stmt->execute();
 	$rows=$stmt->fetchAll();
@@ -114,7 +115,6 @@
 		.cat:hover{
 			border-bottom: 3px solid white;
 			padding-bottom: 5px;
-			transition: 0.5s ease-in-out;
 			color: white;
 		}
 
@@ -201,6 +201,7 @@
 			left: 10px;
 			height: 510px;
 			text-align: center;
+			vertical-align: top;
 		}
 
 
