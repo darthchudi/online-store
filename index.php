@@ -3,6 +3,7 @@
 	ob_start();
 	include('includes/function.php');
 	include('includes/db.php');
+	customerRedirect();
 ?>
 
 
