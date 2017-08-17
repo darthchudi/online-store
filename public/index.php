@@ -1,8 +1,8 @@
 <?php
 	session_start();
 	ob_start();
-	include('includes/function.php');
-	include('includes/db.php');
+	include('../includes/function.php');
+	include('../includes/db.php');
 	customerRedirect();
 ?>
 
@@ -14,10 +14,10 @@
 	<meta charset="utf-8">
 	<meta ttp-equiv="X-UA-Compatible" content="IE=edge">
    	<meta name="viewport" content="width=device-width, initial-scale=1">
-   	<link href="../font awesome/css/font-awesome.min.css" rel="stylesheet">
-   	<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
-   	<script src="../bootstrap/js/jquery-3.2.1.js"></script>
-   	<script src="../bootstrap/js/bootstrap.min.js"> </script>
+   	<link href="../stylesfont awesome/css/font-awesome.min.css" rel="stylesheet">
+   	<link href="../styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+   	<script src="../styles/bootstrap/js/jquery-3.2.1.js"></script>
+   	<script src="../styles/bootstrap/js/bootstrap.min.js"> </script>
 	<title>Index</title>
 	<style>
 		*{
@@ -30,7 +30,7 @@
 		}
 
 		#first{
-			background-image: url('images/cough.jpeg');
+			background-image: url('../styles/images/cough.jpeg');
 			background-size: cover;
 			background-repeat: no-repeat;
 			background: contain;
@@ -277,7 +277,7 @@
 </head>
 <body>
 	<div class="jumbotron" id="first">
-		<img src="icons & logos/tribe-logo-white.png" id="logo">
+		<img src="../styles/icons & logos/tribe-logo-white.png" id="logo">
 		<form id="search-form">
 			<div class="name-wrapper">
 				<input type="text" name="search" placeholder="Search" id="search">

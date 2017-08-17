@@ -1,8 +1,8 @@
 <?php
 	session_start();
 	ob_start();
-	include('includes/function.php');
-	include('includes/db.php');
+	include('../includes/function.php');
+	include('../includes/db.php');
 	authenticate();
 	$admin_id=$_SESSION['admin_id'];
 	$fetch=fetchAdminDetails($conn, $admin_id);
@@ -20,10 +20,10 @@
 	<meta charset="utf-8">
 	<meta ttp-equiv="X-UA-Compatible" content="IE=edge">
    	<meta name="viewport" content="width=device-width, initial-scale=1">
-   	<link href="../font awesome/css/font-awesome.min.css" rel="stylesheet">
-   	<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
-   	<script src="../bootstrap/js/jquery-3.2.1.js"></script>
-   	<script src="../bootstrap/js/bootstrap.min.js"> </script>
+   	<link href="../styles/font awesome/css/font-awesome.min.css" rel="stylesheet">
+   	<link href="../styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+   	<script src="../styles/bootstrap/js/jquery-3.2.1.js"></script>
+   	<script src="../styles/bootstrap/js/bootstrap.min.js"> </script>
 	<title>Admin Home</title>
 	<style>
 
@@ -188,7 +188,7 @@
 </head>
 <body>
 	<div class="nav-container">
-		<a href="admin_home.php"> <img src="icons & logos/tribe-logo-white.png" id="logo"> </a>
+		<a href="admin_home.php"> <img src="../styles/icons & logos/tribe-logo-white.png" id="logo"> </a>
 		<form id="search-form">
 			<div class="name-wrapper">
 				<input type="text" name="search" placeholder="Search" id="search">

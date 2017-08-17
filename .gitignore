@@ -1,3 +1,5 @@
 .vagrant/
 vagrantfile
 phpmyadmin
+sandbox/
+test

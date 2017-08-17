@@ -1,25 +1,23 @@
 <?php
 	session_start();
 	ob_start();
-	include('includes/function.php');
-	include('includes/db.php');
-	authenticate();
+	include('../includes/function.php');
+	include('../includes/db.php');
+	userAuthenticate();
 	$stmt=$conn->prepare("SELECT * FROM books");
 	$stmt->execute();
 	$rows=$stmt->fetchAll();
 	$num_of_rows=$stmt->rowCount() - 1;	
-	$admin_id=$_SESSION['admin_id'];
-	$fetch=fetchAdminDetails($conn, $admin_id);
-	extract($fetch);
+	$customer_id=$_SESSION['loginId']; 	
+	$customer_info=fetchCustomerDetails($conn, $customer_id);
+	$customerFullName=$customer_info['firstName'].' '.$customer_info['lastName'];
+	$cartItems="";
+	$cartItems=fetchNumItemsInCart($conn, $customer_id);
 
-	if(isset($_GET['deleteID'])){
-		$deleteID=$_GET['deleteID'];
-		$book_data=fetchBookDetails($conn, $deleteID);
-		deleteBook($conn, $deleteID, $book_data['book_name']);
+	if(array_key_exists('submit', $_POST)){
+		$id=$_POST['id'];
+		addToCart($conn, $id, $customer_id, $customerFullName);
 	}
-
-
-
 
 	if(isset($_GET['logout'])){
 		logoutCustomer();
@@ -32,13 +30,12 @@
 	<meta charset="utf-8">
 	<meta ttp-equiv="X-UA-Compatible" content="IE=edge">
    	<meta name="viewport" content="width=device-width, initial-scale=1">
-   	<link href="../font awesome/css/font-awesome.min.css" rel="stylesheet">
-   	<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
-   	<script src="../bootstrap/js/jquery-3.2.1.js"></script>
-   	<script src="../bootstrap/js/bootstrap.min.js"> </script>
-	<title>View Books</title>
+   	<link href="../styles/font awesome/css/font-awesome.min.css" rel="stylesheet">
+   	<link href="../styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+   	<script src="../styles/bootstrap/js/jquery-3.2.1.js"></script>
+   	<script src="../styles/bootstrap/js/bootstrap.min.js"> </script>
+	<title>Catalogue</title>
 	<style>
-
 		*{
 			margin: 0;
 			padding: 0;
@@ -170,6 +167,22 @@
 			top: 10px;
 		}
 
+		input[type=submit]{
+			border: 1px solid #2b2a2a;
+			background-color: #2b2a2a;
+			color: white;
+			text-align: center;
+			font-family: Montserrat;
+			padding: 15px 15px;
+			border-radius: 31px;
+			width: 60%;
+		}
+
+		input[type=submit]:hover{
+			background-color: black;
+			transition: 0.5s ease-in-out;
+		}
+
 		.main-container{
 			background-color: #f0f0f0;
 			height: 2500px;
@@ -199,49 +212,12 @@
 			font-family: Montserrat;
 		}
 
-		h3{
-			margin-top: 30px;
-			margin-bottom: 15px;
-		}
-
-		.iconz{	
-			font-size: 19px;
-			color: white;
-		}
-
-		.functions {
-			text-decoration: none;
-			font-family: Montserrat;
-			color: white;
-			margin: 19px;
-			font-size: 14px;	
-			position: relative;
-			top: 25px;
-			border: 1px solid #2b2a2a;
-			padding: 13px 13px;
-			background-color: #2b2a2a;
-			border-radius: 31px;
-			cursor: pointer;
-		}
-
-		a.functions:hover{
-			text-decoration: none;
-			color: white;
-		}
-
-		.functions:hover, a.functions:hover{
-			background-color: black;
-			transition: 0.4s ease-in-out;
-			border: 1px solid black;
-		} 
-
-
 
 	</style>
 </head>
 <body>
 	<div class="nav-container">
-		<a href="admin_home.php"> <img src="icons & logos/tribe-logo-white.png" id="logo"> </a>
+		<a href="catalogue.php"> <img src="../styles/icons & logos/tribe-logo-white.png" id="logo"> </a>
 		<form id="search-form">
 			<div class="name-wrapper">
 				<input type="text" name="search" placeholder="Search" id="search">
@@ -249,21 +225,29 @@
 			</div>
 		</form>
 		<ul>
-			<li><a href="add_books.php" class="cat">Add Books</a></li>
-			<li><a href="#" class="cat">View Books</a></li>
+			<li><a href="#" class="cat">View Catalogue</a></li>
 			<li>
-				<a href="#" data-toggle="popover" title="Admin Details" data-content="Logged in as: <?php echo $fullName ?>" data-placement="bottom" data-trigger="focus">
-					<span class="fa fa-user-circle iconss"></span>
+				<a href="view_cart.php">
+					<span class="fa fa-shopping-cart icons"></span>
+					<label class="badge" id="cartBadge"><?php echo $cartItems ?></label>
 				</a>
 			</li>
-			<li><a href="admin_home.php?logout"><span class="fa fa-power-off iconss"></span></a></li>
+			<li>
+				<a href="#" data-toggle="popover" title="User Details" data-content="Logged in as: <?php echo $customerFullName ?>" data-placement="bottom" data-trigger="focus">
+					<span class="fa fa-user-circle icons"></span>
+				</a>
+			</li>
+			<li><a href="Catalogue.php?logout"><span class="fa fa-power-off icons"></span></a></li>
 		</ul>
 	</div>
+
+
+
 
 	<div class="main-container">
 		<?php
 			for ($i=0; $i<=$num_of_rows; $i++){
-			$book_image='uploads/'.$rows[$i]['book_image'];
+			$book_image='../uploads/'.$rows[$i]['book_image'];
 		?>
 		<div class="book-container">
 			<img src="<?php echo $book_image ?>" class="image">
@@ -272,23 +256,23 @@
 			<h4> Category: <?php echo $rows[$i]['book_category'] ?></h4>
 			<h4> <?php echo 'Year of release: '.$rows[$i]['year_of_release'] ?></h4>
 			<h4> <?php echo 'N'.$rows[$i]['book_price'] ?></h4>
-			<a href="edit_books.php?editID=<?php echo $rows[$i]['book_id'] ?>" class="functions"><span class="fa fa-pencil-square-o iconz"></span>    Edit</a>
-			<a href="view_books.php?deleteID=<?php echo $rows[$i]['book_id'] ?>" class="functions"><span class="fa fa-trash-o iconz"></span>   Delete</a>
+			<form action="" method="post">
+				<input type="hidden" name="id" value="<?php echo $rows[$i]['book_id'] ?>">
+				<input type="submit" value="Add to cart" name="submit">
+			</form>	
 		</div>
 		<?php
 			}
 		?>
 
 	</div>
-
-
 	
 
 	<script>
 		$(document).ready(function(){
     		$('[data-toggle="popover"]').popover(); 
 		});
-	</script>
+</script>
 	
 </body>
 </html>
