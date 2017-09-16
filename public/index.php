@@ -14,7 +14,7 @@
 	<meta charset="utf-8">
 	<meta ttp-equiv="X-UA-Compatible" content="IE=edge">
    	<meta name="viewport" content="width=device-width, initial-scale=1">
-   	<link href="../stylesfont awesome/css/font-awesome.min.css" rel="stylesheet">
+   	<link href="../styles/font awesome/css/font-awesome.min.css" rel="stylesheet">
    	<link href="../styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
    	<script src="../styles/bootstrap/js/jquery-3.2.1.js"></script>
    	<script src="../styles/bootstrap/js/bootstrap.min.js"> </script>

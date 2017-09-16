@@ -27,7 +27,7 @@
 		}
 
 		if(empty($_POST['author_name'])){
-			$error['author_name']="Enter an author name";
+			$error['author_name']="Enter the author name";
 		}
 
 		if(empty($_POST['year'])){
